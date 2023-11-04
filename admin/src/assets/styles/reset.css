@@ -1,0 +1,14 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Optionally, you can apply more specific styles for certain elements */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.925);
+}
