@@ -8,4 +8,5 @@ const reportsController_1 = require("../controllers/reportsController");
 const router = express_1.default.Router();
 router.get("/export", reportsController_1.exportReports);
 router.post("/quantity", reportsController_1.updateQuantity);
+router.post("/boxQuantity", reportsController_1.updateBoxQuantity);
 exports.default = router;

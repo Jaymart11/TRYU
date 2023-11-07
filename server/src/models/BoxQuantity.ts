@@ -10,7 +10,7 @@ const boxQuantitySchema: Schema = new Schema(
           ref: "Box",
           required: true,
         },
-        quantity: { type: Number, required: true },
+        quantity: { type: Number },
       },
     ],
   },

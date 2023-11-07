@@ -43,7 +43,6 @@ exports.getSingleBox = getSingleBox;
 const createBox = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const boxData = req.body;
-        console.log(boxData);
         const box = new Box_1.default(boxData);
         const savedBox = yield box.save();
         res.json(savedBox);

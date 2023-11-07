@@ -32,7 +32,7 @@ const boxQuantitySchema = new mongoose_1.Schema({
                 ref: "Box",
                 required: true,
             },
-            quantity: { type: Number, required: true },
+            quantity: { type: Number },
         },
     ],
 }, { timestamps: true });

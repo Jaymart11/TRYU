@@ -91,9 +91,9 @@ const updateBoxQuantity = (req, res) => __awaiter(void 0, void 0, void 0, functi
 exports.updateBoxQuantity = updateBoxQuantity;
 // Schedule the task to run at 12 AM every day
 const rule = new schedule.RecurrenceRule();
-rule.hour = 2;
-rule.minute = 16;
-rule.second = 25;
+rule.hour = 23;
+rule.minute = 59;
+rule.second = 59;
 const _job = schedule.scheduleJob(rule, exports.updateQuantity);
 const _job2 = schedule.scheduleJob(rule, exports.updateBoxQuantity);
 const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -102,14 +102,14 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const worksheet = workbook.addWorksheet("Sheet 1");
     // Define column headers based on JSON keys
     worksheet.addRow(reportHeaders);
-    const startDate = new Date("2023-10-04 00:00:00.000Z");
-    const endDate = new Date("2023-10-04 23:59:59.999Z");
+    const startDate = new Date("2023-11-07 00:00:00.000Z");
+    const endDate = new Date("2023-11-07 23:59:59.999Z");
     const yesterdayStart = new Date(startDate.getTime() - 24 * 60 * 60 * 1000);
     const yesterdayEnd = new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
     const compiledOrders = yield Order_1.default.aggregate([
         {
             $match: {
-                transactionDate: {
+                createdAt: {
                     $gte: startDate,
                     $lte: endDate, // Less than the end date (start of the next day)
                 },
@@ -167,9 +167,10 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             },
         },
     ]);
+    // console.log(compiledOrders);
     const allProducts = yield Product_1.default.find({}).populate("category", "name");
     const quantityDocuments = yield Quantity_1.default.find({
-        date: {
+        createdAt: {
             $gte: yesterdayStart,
             $lte: yesterdayEnd,
         },
@@ -229,9 +230,15 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     let lastCategory = "";
     const categorySet = new Set();
     // Add data from JSON to the worksheet
-    mergedData.forEach((record) => {
+    mergedData
+        .sort((a, b) => {
+        return a.category.localeCompare(b.category); // Sort the rest alphabetically
+    })
+        .forEach((record) => {
         // Check if the category has changed
-        if (record.category !== lastCategory && !categorySet.has(record.category)) {
+        // console.log(record.category);
+        if (record.category !== lastCategory &&
+            !categorySet.has(record.category)) {
             // Insert a new row with the category name
             worksheet.addRow([record.category, "", "", "", "", "", ""]); // Change the column index as needed
             // Format the category row
@@ -241,12 +248,16 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             lastCategory = record.category;
             categorySet.add(record.category);
         }
+        // console.log(record.productName);
         // Add the product data
         worksheet.addRow([
             record.productName,
             record.currentPrice,
-            record.previousQuantity,
-            record.previousQuantity - record.totalQuantity,
+            record.previousQuantity || "",
+            record.previousQuantity - record.totalQuantity > 0 &&
+                record.previousQuantity - record.totalQuantity
+                ? record.previousQuantity - record.totalQuantity
+                : "",
             "",
             record.totalQuantity,
             record.totalPrice,
@@ -295,7 +306,7 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const boxQuantities = yield Order_1.default.aggregate([
         {
             $match: {
-                transactionDate: {
+                createdAt: {
                     $gte: startDate,
                     $lte: endDate, // Less than the end date (start of the next day)
                 },
@@ -387,7 +398,7 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const boxQuantity = yield BoxQuantity_1.default.aggregate([
         {
             $match: {
-                date: {
+                createdAt: {
                     $gte: yesterdayStart,
                     $lte: yesterdayEnd,
                 },
@@ -423,7 +434,6 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             },
         },
     ]);
-    console.log(boxQuantity);
     // Create a mapping of boxes from array2 to their quantities using a different variable name
     const boxToQuantityMap = {};
     for (const item of boxQuantity) {

@@ -10,7 +10,7 @@ const quantitySchema: Schema = new Schema(
           ref: "Product",
           required: true,
         },
-        quantity: { type: Number, required: true },
+        quantity: { type: Number },
         price: { type: Number, required: true },
       },
     ],

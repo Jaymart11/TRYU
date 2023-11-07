@@ -56,9 +56,9 @@ export const updateBoxQuantity = async (req: any, res: any) => {
 
 // Schedule the task to run at 12 AM every day
 const rule = new schedule.RecurrenceRule();
-rule.hour = 2;
-rule.minute = 16;
-rule.second = 25;
+rule.hour = 23;
+rule.minute = 59;
+rule.second = 59;
 
 const _job = schedule.scheduleJob(rule, updateQuantity);
 const _job2 = schedule.scheduleJob(rule, updateBoxQuantity);
@@ -71,8 +71,8 @@ export const exportReports = async (req: any, res: any) => {
   // Define column headers based on JSON keys
   worksheet.addRow(reportHeaders);
 
-  const startDate = new Date("2023-10-04 00:00:00.000Z");
-  const endDate = new Date("2023-10-04 23:59:59.999Z");
+  const startDate = new Date("2023-11-07 00:00:00.000Z");
+  const endDate = new Date("2023-11-07 23:59:59.999Z");
 
   const yesterdayStart = new Date(startDate.getTime() - 24 * 60 * 60 * 1000);
   const yesterdayEnd = new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
@@ -138,6 +138,8 @@ export const exportReports = async (req: any, res: any) => {
       },
     },
   ]);
+
+  // console.log(compiledOrders);
 
   const allProducts = await Product.find({}).populate("category", "name");
 
@@ -212,33 +214,44 @@ export const exportReports = async (req: any, res: any) => {
   const categorySet = new Set();
 
   // Add data from JSON to the worksheet
-  mergedData.forEach((record) => {
-    // Check if the category has changed
-    if (record.category !== lastCategory && !categorySet.has(record.category)) {
-      // Insert a new row with the category name
-      worksheet.addRow([record.category, "", "", "", "", "", ""]); // Change the column index as needed
+  mergedData
+    .sort((a, b) => {
+      return a.category.localeCompare(b.category); // Sort the rest alphabetically
+    })
+    .forEach((record) => {
+      // Check if the category has changed
+      // console.log(record.category);
+      if (
+        record.category !== lastCategory &&
+        !categorySet.has(record.category)
+      ) {
+        // Insert a new row with the category name
+        worksheet.addRow([record.category, "", "", "", "", "", ""]); // Change the column index as needed
 
-      // Format the category row
-      const categoryRow: any = worksheet.lastRow;
-      formatCategoryRow(categoryRow);
+        // Format the category row
+        const categoryRow: any = worksheet.lastRow;
+        formatCategoryRow(categoryRow);
 
-      // Update the lastCategory variable
-      lastCategory = record.category;
+        // Update the lastCategory variable
+        lastCategory = record.category;
 
-      categorySet.add(record.category);
-    }
-
-    // Add the product data
-    worksheet.addRow([
-      record.productName,
-      record.currentPrice,
-      record.previousQuantity,
-      record.previousQuantity - record.totalQuantity,
-      "",
-      record.totalQuantity,
-      record.totalPrice,
-    ]);
-  });
+        categorySet.add(record.category);
+      }
+      // console.log(record.productName);
+      // Add the product data
+      worksheet.addRow([
+        record.productName,
+        record.currentPrice,
+        record.previousQuantity || "",
+        record.previousQuantity - record.totalQuantity > 0 &&
+        record.previousQuantity - record.totalQuantity
+          ? record.previousQuantity - record.totalQuantity
+          : "",
+        "",
+        record.totalQuantity,
+        record.totalPrice,
+      ]);
+    });
 
   function formatCategoryRow(row: ExcelJS.Row) {
     // Apply formatting to the category row
@@ -425,8 +438,6 @@ export const exportReports = async (req: any, res: any) => {
       },
     },
   ]);
-
-  console.log(boxQuantity);
 
   // Create a mapping of boxes from array2 to their quantities using a different variable name
   const boxToQuantityMap: { [key: string]: { prevQuantity: number } } = {};
