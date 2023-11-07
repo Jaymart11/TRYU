@@ -1,26 +1,26 @@
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import {
-  TextField,
   Button,
   FormControl,
+  Grid,
   InputLabel,
-  Select,
   MenuItem,
-  Box,
+  Select,
+  TextField,
   Typography,
 } from "@mui/material";
-import { IProductCreate } from "../../../shared/interface/IProduct";
+import { useFormik } from "formik";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+import { ROUTES } from "../../../shared/constants/ROUTES";
+import { useFetchBox } from "../../../shared/dao/boxDao";
+import { useFetchCategory } from "../../../shared/dao/categoryDao";
 import {
   useCreateProduct,
   useFetchSingleProduct,
   useUpdateProduct,
 } from "../../../shared/dao/productsDao";
-import { useFetchCategory } from "../../../shared/dao/categoryDao";
-import { ROUTES } from "../../../shared/constants/ROUTES";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";
-import { useFetchBox } from "../../../shared/dao/boxDao";
+import { IProductCreate } from "../../../shared/interface/IProduct";
 import { IUser } from "../../../shared/interface/IUser";
 
 interface FormValues {
@@ -31,25 +31,6 @@ interface FormValues {
   quantity?: number;
   price: number;
 }
-
-const futuristicStyles = {
-  formContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "2rem",
-    borderRadius: "10px",
-  },
-  formControl: {
-    marginBottom: "1rem",
-    // width: "100%",
-  },
-  submitButton: {
-    marginTop: "1rem",
-    marginRight: "1rem",
-  },
-};
 
 const validationSchema = Yup.object({
   name: Yup.string().required(),
@@ -140,139 +121,165 @@ const InventoryView = () => {
   const navigate = useNavigate();
 
   return (
-    <Box sx={futuristicStyles.formContainer}>
-      <form onSubmit={formik.handleSubmit}>
+    <form
+      onSubmit={formik.handleSubmit}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        marginTop: "100px",
+      }}
+    >
+      <Grid container rowSpacing={2} direction="column" width="50vw">
         {user?.role === "Manager" && (
           <>
-            <FormControl
-              fullWidth
-              variant="outlined"
-              error={formik.touched.category && Boolean(formik.errors.category)}
-              sx={futuristicStyles.formControl}
-            >
-              <InputLabel>Category</InputLabel>
-              <Select
-                id="category"
-                name="category"
-                value={formik.values.category || ""}
-                onChange={formik.handleChange}
-                label="Select Category"
+            <Grid item>
+              <FormControl
+                fullWidth
+                variant="outlined"
+                error={
+                  formik.touched.category && Boolean(formik.errors.category)
+                }
               >
-                {data?.map((category) => (
-                  <MenuItem key={category._id} value={category._id}>
-                    {category.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
-              label="Code"
-              variant="outlined"
-              fullWidth
-              id="code"
-              name="code"
-              value={formik.values.code}
-              onChange={formik.handleChange}
-              error={formik.touched.code && Boolean(formik.errors.code)}
-              helperText={formik.touched.code && formik.errors.code}
-              sx={futuristicStyles.formControl}
-            />
-            <TextField
-              label="Product"
-              variant="outlined"
-              fullWidth
-              id="name"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
-              sx={futuristicStyles.formControl}
-            />
-            <FormControl
-              fullWidth
-              variant="outlined"
-              error={formik.touched.box && Boolean(formik.errors.box)}
-              sx={futuristicStyles.formControl}
-            >
-              <InputLabel>Box/Packaging</InputLabel>
-              <Select
-                id="box"
-                name="box"
-                value={formik.values.box || ""}
+                <InputLabel>Category</InputLabel>
+                <Select
+                  id="category"
+                  name="category"
+                  value={formik.values.category || ""}
+                  onChange={formik.handleChange}
+                  label="Select Category"
+                >
+                  {data?.map((category) => (
+                    <MenuItem key={category._id} value={category._id}>
+                      {category.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item>
+              <TextField
+                label="Code"
+                variant="outlined"
+                fullWidth
+                id="code"
+                name="code"
+                value={formik.values.code}
                 onChange={formik.handleChange}
-                label="Select Box/Packaging"
+                error={formik.touched.code && Boolean(formik.errors.code)}
+                helperText={formik.touched.code && formik.errors.code}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                label="Product"
+                variant="outlined"
+                fullWidth
+                id="name"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+              />
+            </Grid>
+            <Grid item>
+              <FormControl
+                fullWidth
+                variant="outlined"
+                error={formik.touched.box && Boolean(formik.errors.box)}
               >
-                {BoxData?.map((box) => (
-                  <MenuItem key={box._id} value={box._id}>
-                    {box.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>{" "}
+                <InputLabel>Packaging</InputLabel>
+                <Select
+                  id="box"
+                  name="box"
+                  value={formik.values.box || ""}
+                  onChange={formik.handleChange}
+                  label="Select Box/Packaging"
+                >
+                  {BoxData?.map((box) => (
+                    <MenuItem key={box._id} value={box._id}>
+                      {box.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>{" "}
+            </Grid>
           </>
         )}
         {user?.role === "Cashier" && (
-          <Box sx={{ marginBottom: "20px", width: "100%" }}>
-            <Typography variant="body1" sx={{ marginBottom: "20px" }}>
-              <b>Product:</b> {formik.values.name}
-            </Typography>
-            <Typography variant="body1">
-              <b>Current Quantity:</b> {singleProduct?.quantity}
-            </Typography>
-          </Box>
+          <Grid
+            container
+            spacing={2}
+            direction="column"
+            sx={{ color: "white" }}
+          >
+            <Grid item>
+              <Typography variant="h6">
+                <b style={{ color: "#fffb00b0" }}>Product:</b>{" "}
+                {formik.values.name}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="h6">
+                <b style={{ color: "#fffb00b0" }}>Current Quantity:</b>{" "}
+                {singleProduct?.quantity}
+              </Typography>
+            </Grid>
+          </Grid>
         )}
-
-        <TextField
-          label="Quantity"
-          variant="outlined"
-          fullWidth
-          id="quantity"
-          name="quantity"
-          value={formik.values.quantity || ""}
-          onChange={formik.handleChange}
-          error={formik.touched.quantity && Boolean(formik.errors.quantity)}
-          helperText={formik.touched.quantity && formik.errors.quantity}
-          type="number"
-          sx={futuristicStyles.formControl}
-        />
-
-        {user?.role === "Manager" && (
+        <Grid item>
           <TextField
-            label="Price"
+            label="Quantity"
             variant="outlined"
             fullWidth
-            id="price"
-            name="price"
-            value={formik.values.price}
+            id="quantity"
+            name="quantity"
+            value={formik.values.quantity || ""}
             onChange={formik.handleChange}
-            error={formik.touched.price && Boolean(formik.errors.price)}
-            helperText={formik.touched.price && formik.errors.price}
+            error={formik.touched.quantity && Boolean(formik.errors.quantity)}
+            helperText={formik.touched.quantity && formik.errors.quantity}
             type="number"
-            sx={futuristicStyles.formControl}
           />
+        </Grid>
+
+        {user?.role === "Manager" && (
+          <Grid item>
+            <TextField
+              label="Price"
+              variant="outlined"
+              fullWidth
+              id="price"
+              name="price"
+              value={formik.values.price}
+              onChange={formik.handleChange}
+              error={formik.touched.price && Boolean(formik.errors.price)}
+              helperText={formik.touched.price && formik.errors.price}
+              type="number"
+            />
+          </Grid>
         )}
-        <div>
-          <Button
-            color="primary"
-            variant="contained"
-            type="submit"
-            sx={futuristicStyles.submitButton}
-          >
-            {isEdit ? "Update" : "Submit"}
-          </Button>
-          <Button
-            color="primary"
-            variant="outlined"
-            type="submit"
-            onClick={() => navigate(ROUTES.PRODUCT.LIST)}
-            sx={futuristicStyles.submitButton}
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
-    </Box>
+        <Grid item>
+          <div>
+            <Button
+              color="primary"
+              variant="outlined"
+              type="submit"
+              sx={{ marginRight: "10px" }}
+            >
+              {isEdit ? "Update" : "Submit"}
+            </Button>
+            <Button
+              color="error"
+              variant="outlined"
+              type="submit"
+              onClick={() => navigate(ROUTES.PRODUCT.LIST)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Grid>
+      </Grid>
+    </form>
   );
 };
 

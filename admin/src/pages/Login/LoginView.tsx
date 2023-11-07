@@ -119,7 +119,7 @@ const Login: React.FC = () => {
             <StyledSubmitButton
               type="button"
               fullWidth
-              variant="contained"
+              variant="outlined"
               color="primary"
               onClick={handleLogin}
             >

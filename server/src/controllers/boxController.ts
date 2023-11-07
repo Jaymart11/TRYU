@@ -30,7 +30,6 @@ export const getSingleBox = async (req: Request, res: Response) => {
 export const createBox = async (req: Request, res: Response) => {
   try {
     const boxData: IBox = req.body;
-    console.log(boxData);
     const box = new Box(boxData);
     const savedBox = await box.save();
 

@@ -1,14 +1,14 @@
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { TextField, Button, Box, Typography } from "@mui/material";
+import { ROUTES } from "../../../shared/constants/ROUTES";
 import {
   useCreateBox,
   useFetchSingleBox,
   useUpdateBox,
 } from "../../../shared/dao/boxDao";
-import { ROUTES } from "../../../shared/constants/ROUTES";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";
 import { IBox } from "../../../shared/interface/IBox";
 import { IUser } from "../../../shared/interface/IUser";
 
@@ -89,54 +89,85 @@ const BoxView = () => {
   const navigate = useNavigate();
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      {user?.role === "Manager" ? (
-        <TextField
-          label="Packaging Name"
-          variant="outlined"
-          fullWidth
-          id="name"
-          name="name"
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
-        />
-      ) : (
-        <Box sx={{ marginBottom: "20px", width: "100%" }}>
-          <Typography variant="body1" sx={{ marginBottom: "20px" }}>
-            <b>Packaging Name:</b> {formik.values.name}
-          </Typography>
-          <Typography variant="body1">
-            <b>Current Quantity:</b> {singleBox?.quantity}
-          </Typography>
-        </Box>
-      )}
-      <TextField
-        label="Quantity"
-        variant="outlined"
-        fullWidth
-        id="quantity"
-        name="quantity"
-        value={formik.values.quantity}
-        onChange={formik.handleChange}
-        error={formik.touched.quantity && Boolean(formik.errors.quantity)}
-        helperText={formik.touched.quantity && formik.errors.quantity}
-        type="number"
-      />
-      <div>
-        <Button color="primary" variant="contained" type="submit">
-          {isEdit ? "Update" : "Submit"}
-        </Button>
-        <Button
-          color="primary"
-          variant="outlined"
-          type="submit"
-          onClick={() => navigate(ROUTES.BOX.LIST)}
-        >
-          Cancel
-        </Button>
-      </div>
+    <form
+      onSubmit={formik.handleSubmit}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        marginTop: "100px",
+      }}
+    >
+      <Grid container rowSpacing={2} direction="column" width="50vw">
+        {user?.role === "Manager" ? (
+          <Grid item>
+            <TextField
+              label="Packaging Name"
+              variant="outlined"
+              fullWidth
+              id="name"
+              name="name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
+            />
+          </Grid>
+        ) : (
+          <Grid
+            container
+            spacing={2}
+            direction="column"
+            sx={{ color: "white" }}
+          >
+            <Grid item>
+              <Typography variant="h6">
+                <b style={{ color: "#fffb00b0" }}>Packaging Name:</b>{" "}
+                {formik.values.name}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="h6">
+                <b style={{ color: "#fffb00b0" }}>Current Quantity:</b>{" "}
+                {singleBox?.quantity}
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
+        <Grid item>
+          <TextField
+            label="Quantity"
+            variant="outlined"
+            fullWidth
+            id="quantity"
+            name="quantity"
+            value={formik.values.quantity}
+            onChange={formik.handleChange}
+            error={formik.touched.quantity && Boolean(formik.errors.quantity)}
+            helperText={formik.touched.quantity && formik.errors.quantity}
+            type="number"
+          />
+        </Grid>
+        <Grid item>
+          <div>
+            <Button
+              color="primary"
+              variant="outlined"
+              type="submit"
+              sx={{ marginRight: "10px" }}
+            >
+              {isEdit ? "Update" : "Submit"}
+            </Button>
+            <Button
+              color="error"
+              variant="outlined"
+              type="submit"
+              onClick={() => navigate(ROUTES.BOX.LIST)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Grid>
+      </Grid>
     </form>
   );
 };

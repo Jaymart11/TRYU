@@ -58,18 +58,19 @@ export default function ListView() {
 
   return (
     <>
-      {user?.role === "Manager" && (
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ marginBottom: "10px" }}
-            onClick={() => navigate(`${ROUTES.BOX.CREATE}`)}
-          >
-            Create Box
-          </Button>
-        </div>
-      )}
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="outlined"
+          color="primary"
+          sx={{
+            marginBottom: "10px",
+            visibility: user?.role === "Manager" ? "" : "hidden",
+          }}
+          onClick={() => navigate(`${ROUTES.BOX.CREATE}`)}
+        >
+          Create Packaging
+        </Button>
+      </div>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer>
           <Table aria-label="collapsible table">

@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Grid } from "@mui/material";
 import {
   useCreateCategory,
   useFetchSingleCategory,
@@ -73,31 +73,50 @@ const CategoryView = () => {
   const navigate = useNavigate();
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <TextField
-        label="Name"
-        variant="outlined"
-        fullWidth
-        id="name"
-        name="name"
-        value={formik.values.name}
-        onChange={formik.handleChange}
-        error={formik.touched.name && Boolean(formik.errors.name)}
-        helperText={formik.touched.name && formik.errors.name}
-      />
-      <div>
-        <Button color="primary" variant="contained" type="submit">
-          {isEdit ? "Update" : "Submit"}
-        </Button>
-        <Button
-          color="primary"
-          variant="outlined"
-          type="submit"
-          onClick={() => navigate(ROUTES.CATEGORY.LIST)}
-        >
-          Cancel
-        </Button>
-      </div>
+    <form
+      onSubmit={formik.handleSubmit}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "15vh",
+      }}
+    >
+      <Grid container rowSpacing={2} direction="column" width="50vw">
+        <Grid item>
+          <TextField
+            label="Name"
+            variant="outlined"
+            fullWidth
+            id="name"
+            name="name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            error={formik.touched.name && Boolean(formik.errors.name)}
+            helperText={formik.touched.name && formik.errors.name}
+          />
+        </Grid>
+        <Grid item>
+          <div>
+            <Button
+              color="primary"
+              variant="outlined"
+              type="submit"
+              sx={{ marginRight: "10px" }}
+            >
+              {isEdit ? "Update" : "Submit"}
+            </Button>
+            <Button
+              color="error"
+              variant="outlined"
+              type="submit"
+              onClick={() => navigate(ROUTES.CATEGORY.LIST)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Grid>
+      </Grid>
     </form>
   );
 };

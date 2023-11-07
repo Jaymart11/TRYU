@@ -83,7 +83,7 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                             )?.quantity ?? 0) === 1 &&
                             (currentProducts.find(
                               (p) => p.name === "Bangus Meal"
-                            )?.quantity ?? 0) === 2
+                            )?.quantity ?? 0) >= 2
                           ) &&
                           (currentProducts.find((p) => p.name === "Bangus Meal")
                             ?.quantity ?? 0) < 4) ||
@@ -91,18 +91,18 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                         (product.name === "Chicken Pulutan" &&
                           (currentProducts.find(
                             (p) => p.name === "Chicken Kasalo"
-                          )?.quantity ?? 0) < 2 &&
+                          )?.quantity ?? 0) <= 2 &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Chicken Kasalo"
                             )?.quantity ?? 0) === 1 &&
                             (currentProducts.find(
                               (p) => p.name === "Chicken Meal"
-                            )?.quantity ?? 0) === 2
+                            )?.quantity ?? 0) >= 2
                           ) &&
                           (currentProducts.find(
                             (p) => p.name === "Chicken Meal"
-                          )?.quantity ?? 0) < 4) ||
+                          )?.quantity ?? 0) <= 4) ||
                         //disable for Pork Handaan
                         (product.name === "Pork Handaan" &&
                           !(
@@ -111,38 +111,38 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                             )?.quantity ?? 0) === 1 &&
                             (currentProducts.find(
                               (p) => p.name === "Pork Pulutan"
-                            )?.quantity ?? 0) === 1
+                            )?.quantity ?? 0) >= 1
                           ) &&
                           (currentProducts.find((p) => p.name === "Pork Kasalo")
-                            ?.quantity ?? 0) < 3 &&
+                            ?.quantity ?? 0) <= 3 &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Pork Kasalo"
                             )?.quantity ?? 0) === 2 &&
                             (currentProducts.find((p) => p.name === "Pork Meal")
-                              ?.quantity ?? 0) === 2
+                              ?.quantity ?? 0) >= 2
                           ) &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Pork Kasalo"
                             )?.quantity ?? 0) === 1 &&
                             (currentProducts.find((p) => p.name === "Pork Meal")
-                              ?.quantity ?? 0) === 4
+                              ?.quantity ?? 0) >= 4
                           ) &&
                           (currentProducts.find((p) => p.name === "Pork Meal")
-                            ?.quantity ?? 0) < 6) ||
+                            ?.quantity ?? 0) <= 6) ||
                         //disable for Bangus Handaan
                         (product.name === "Bangus Handaan" &&
                           (currentProducts.find(
                             (p) => p.name === "Bangus Kasalo"
-                          )?.quantity ?? 0) < 3 &&
+                          )?.quantity ?? 0) <= 3 &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Bangus Kasalo"
                             )?.quantity ?? 0) === 2 &&
                             (currentProducts.find(
                               (p) => p.name === "Bangus Meal"
-                            )?.quantity ?? 0) === 2
+                            )?.quantity ?? 0) >= 2
                           ) &&
                           !(
                             (currentProducts.find(
@@ -150,23 +150,23 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                             )?.quantity ?? 0) === 1 &&
                             (currentProducts.find(
                               (p) => p.name === "Bangus Meal"
-                            )?.quantity ?? 0) === 4
+                            )?.quantity ?? 0) >= 4
                           ) &&
                           (currentProducts.find((p) => p.name === "Bangus Meal")
-                            ?.quantity ?? 0) < 6) ||
+                            ?.quantity ?? 0) <= 6) ||
                         //disable for Chicken  Handaan
 
                         (product.name === "Chicken Handaan" &&
                           (currentProducts.find(
                             (p) => p.name === "Chicken Kasalo"
-                          )?.quantity ?? 0) < 3 &&
+                          )?.quantity ?? 0) <= 3 &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Chicken Kasalo"
                             )?.quantity ?? 0) === 2 &&
                             (currentProducts.find(
                               (p) => p.name === "Chicken Meal"
-                            )?.quantity ?? 0) === 2
+                            )?.quantity ?? 0) >= 2
                           ) &&
                           !(
                             (currentProducts.find(
@@ -174,20 +174,20 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                             )?.quantity ?? 0) === 1 &&
                             (currentProducts.find(
                               (p) => p.name === "Chicken Meal"
-                            )?.quantity ?? 0) === 4
+                            )?.quantity ?? 0) >= 4
                           ) &&
                           (currentProducts.find(
                             (p) => p.name === "Chicken Meal"
-                          )?.quantity ?? 0) < 6) ||
+                          )?.quantity ?? 0) <= 6) ||
                         //disable for Pork Fiesta
                         (product.name === "Pork Fiesta" &&
                           (currentProducts.find(
                             (p) => p.name === "Pork Pulutan"
-                          )?.quantity ?? 0) < 2 &&
+                          )?.quantity ?? 0) <= 2 &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Pork Kasalo"
-                            )?.quantity ?? 0) === 2 &&
+                            )?.quantity ?? 0) >= 2 &&
                             (currentProducts.find(
                               (p) => p.name === "Pork Pulutan"
                             )?.quantity ?? 0) === 1
@@ -199,37 +199,37 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                               (p) => p.name === "Pork Kasalo"
                             )?.quantity ?? 0) === 3 &&
                             (currentProducts.find((p) => p.name === "Pork Meal")
-                              ?.quantity ?? 0) === 2
+                              ?.quantity ?? 0) >= 2
                           ) &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Pork Kasalo"
                             )?.quantity ?? 0) === 2 &&
                             (currentProducts.find((p) => p.name === "Pork Meal")
-                              ?.quantity ?? 0) === 4
+                              ?.quantity ?? 0) >= 4
                           ) &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Pork Kasalo"
                             )?.quantity ?? 0) === 1 &&
                             (currentProducts.find((p) => p.name === "Pork Meal")
-                              ?.quantity ?? 0) === 6
+                              ?.quantity ?? 0) >= 6
                           ) &&
                           (currentProducts.find((p) => p.name === "Pork Meal")
-                            ?.quantity ?? 0) < 8) ||
+                            ?.quantity ?? 0) <= 8) ||
                         //disable for Bangus fiesta
 
                         (product.name === "Bangus Fiesta" &&
                           (currentProducts.find(
                             (p) => p.name === "Bangus Kasalo"
-                          )?.quantity ?? 0) < 4 &&
+                          )?.quantity ?? 0) <= 4 &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Bangus Kasalo"
                             )?.quantity ?? 0) === 3 &&
                             (currentProducts.find(
                               (p) => p.name === "Bangus Meal"
-                            )?.quantity ?? 0) === 2
+                            )?.quantity ?? 0) >= 2
                           ) &&
                           !(
                             (currentProducts.find(
@@ -237,7 +237,7 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                             )?.quantity ?? 0) === 2 &&
                             (currentProducts.find(
                               (p) => p.name === "Bangus Meal"
-                            )?.quantity ?? 0) === 4
+                            )?.quantity ?? 0) >= 4
                           ) &&
                           !(
                             (currentProducts.find(
@@ -245,23 +245,23 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                             )?.quantity ?? 0) === 1 &&
                             (currentProducts.find(
                               (p) => p.name === "Bangus Meal"
-                            )?.quantity ?? 0) === 6
+                            )?.quantity ?? 0) >= 6
                           ) &&
                           (currentProducts.find((p) => p.name === "Bangus Meal")
-                            ?.quantity ?? 0) < 8) ||
+                            ?.quantity ?? 0) <= 8) ||
                         //disable for Chicken Fiesta
 
                         (product.name === "Chicken Fiesta" &&
                           (currentProducts.find(
                             (p) => p.name === "Chicken Kasalo"
-                          )?.quantity ?? 0) < 4 &&
+                          )?.quantity ?? 0) <= 4 &&
                           !(
                             (currentProducts.find(
                               (p) => p.name === "Chicken Kasalo"
                             )?.quantity ?? 0) === 3 &&
                             (currentProducts.find(
                               (p) => p.name === "Chicken Meal"
-                            )?.quantity ?? 0) === 2
+                            )?.quantity ?? 0) >= 2
                           ) &&
                           !(
                             (currentProducts.find(
@@ -269,7 +269,7 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                             )?.quantity ?? 0) === 2 &&
                             (currentProducts.find(
                               (p) => p.name === "Chicken Meal"
-                            )?.quantity ?? 0) === 4
+                            )?.quantity ?? 0) >= 4
                           ) &&
                           !(
                             (currentProducts.find(
@@ -277,11 +277,11 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
                             )?.quantity ?? 0) === 1 &&
                             (currentProducts.find(
                               (p) => p.name === "Chicken Meal"
-                            )?.quantity ?? 0) === 6
+                            )?.quantity ?? 0) >= 6
                           ) &&
                           (currentProducts.find(
                             (p) => p.name === "Chicken Meal"
-                          )?.quantity ?? 0) < 8)
+                          )?.quantity ?? 0) <= 8)
                       }
                     >
                       <AddIcon />

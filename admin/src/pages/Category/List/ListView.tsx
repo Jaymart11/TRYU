@@ -59,7 +59,7 @@ export default function ListView() {
     <>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
-          variant="contained"
+          variant="outlined"
           color="primary"
           sx={{ marginBottom: "10px" }}
           onClick={() => navigate(`${ROUTES.CATEGORY.CREATE}`)}

@@ -57,12 +57,12 @@ const TransactionView: React.FC = () => {
       >
         <Typography variant="h4">Pick Transaction</Typography>
         <Box mt={2}>
-          <Button variant="contained" color="primary" onClick={openOrderMenu}>
+          <Button variant="outlined" color="primary" onClick={openOrderMenu}>
             Order
           </Button>
           {/* Inventory Buttons */}
           <Button
-            variant="contained"
+            variant="outlined"
             color="secondary"
             style={{ marginLeft: "8px" }}
             onClick={openInvMenu}
@@ -70,7 +70,7 @@ const TransactionView: React.FC = () => {
             Inventory
           </Button>
           <Button
-            variant="contained"
+            variant="outlined"
             color="error"
             style={{ marginLeft: "8px" }}
           >

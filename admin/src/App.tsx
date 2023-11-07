@@ -1,5 +1,5 @@
 import { lazy, useEffect } from "react";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { ROUTES } from "./shared/constants/ROUTES";
 // import Layout from "./components/layout/Layout";
 const InventoryList = lazy(() => import("./pages/Inventory/List/ListView"));
@@ -21,8 +21,6 @@ const Transaction = lazy(() => import("./pages/Ordering/TransactionView"));
 const Ordering = lazy(() => import("./pages/Ordering/orderingView"));
 const Login = lazy(() => import("./pages/Login/LoginView"));
 
-const RootRedirect = () => <Navigate to={`${ROUTES.LOGIN}`} replace />;
-
 const App = () => {
   const navigate = useNavigate();
 
@@ -40,7 +38,6 @@ const App = () => {
       <Sidebar />
       <AppBar />
       <Routes>
-        <Route path="/" element={<RootRedirect />} />
         <Route path={`${ROUTES.LOGIN}`} element={<Login />} />
         <Route
           path={`${ROUTES.PRODUCT.LIST}`}

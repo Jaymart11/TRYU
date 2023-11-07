@@ -80,7 +80,7 @@ export const exportReports = async (req: any, res: any) => {
   const compiledOrders = await Order.aggregate([
     {
       $match: {
-        transactionDate: {
+        createdAt: {
           $gte: startDate, // Greater than or equal to the start date (start of the day)
           $lte: endDate, // Less than the end date (start of the next day)
         },
@@ -142,7 +142,7 @@ export const exportReports = async (req: any, res: any) => {
   const allProducts = await Product.find({}).populate("category", "name");
 
   const quantityDocuments = await Quantity.find({
-    date: {
+    createdAt: {
       $gte: yesterdayStart,
       $lte: yesterdayEnd,
     },
@@ -296,7 +296,7 @@ export const exportReports = async (req: any, res: any) => {
   const boxQuantities = await Order.aggregate([
     {
       $match: {
-        transactionDate: {
+        createdAt: {
           $gte: startDate, // Greater than or equal to the start date (start of the day)
           $lte: endDate, // Less than the end date (start of the next day)
         },
@@ -389,7 +389,7 @@ export const exportReports = async (req: any, res: any) => {
   const boxQuantity = await BoxQuantity.aggregate([
     {
       $match: {
-        date: {
+        createdAt: {
           $gte: yesterdayStart,
           $lte: yesterdayEnd,
         },
