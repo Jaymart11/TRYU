@@ -106,7 +106,7 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const endDate = new Date("2023-11-07 23:59:59.999Z");
     const yesterdayStart = new Date(startDate.getTime() - 24 * 60 * 60 * 1000);
     const yesterdayEnd = new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
-    const compiledOrders = yield Order_1.default.aggregate([
+    const queryOrders = yield Order_1.default.aggregate([
         {
             $match: {
                 createdAt: {
@@ -167,7 +167,33 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             },
         },
     ]);
-    // console.log(compiledOrders);
+    const compiledLess = yield Order_1.default.aggregate([
+        { $unwind: "$products" },
+        { $unwind: "$products.less" },
+        {
+            $group: {
+                _id: {
+                    productName: "$products.less.name",
+                    productID: "$products.less.product",
+                },
+                lessQuantity: { $sum: "$products.less.quantity" },
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                product: "$_id.productID",
+                productName: "$_id.productName",
+                lessQuantity: 1,
+            },
+        },
+    ]);
+    console.log(compiledLess);
+    const compiledOrders = queryOrders.map((item2) => {
+        const matchingItem = compiledLess.find((item1) => item1.productName === item2.productName);
+        return Object.assign(Object.assign({}, item2), matchingItem);
+    });
+    // console.log(combinedArray);
     const allProducts = yield Product_1.default.find({}).populate("category", "name");
     const quantityDocuments = yield Quantity_1.default.find({
         createdAt: {
@@ -210,6 +236,7 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 category: compiledOrder.category,
                 previousQuantity: previousQuantity,
                 currentPrice: currentPrice,
+                lessQuantity: compiledOrder.lessQuantity,
             };
         }
         else {
@@ -219,6 +246,7 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 product: product._id,
                 productName: product.name,
                 productCode: product.code,
+                // lessQuantity: compiledOrder.lessQuantity,
                 category: typeof product.category === "string"
                     ? product.category
                     : product.category.name,
@@ -229,6 +257,7 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     });
     let lastCategory = "";
     const categorySet = new Set();
+    // console.log(mergedData);
     // Add data from JSON to the worksheet
     mergedData
         .sort((a, b) => {
@@ -256,9 +285,11 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             record.previousQuantity || "",
             record.previousQuantity - record.totalQuantity > 0 &&
                 record.previousQuantity - record.totalQuantity
-                ? record.previousQuantity - record.totalQuantity
+                ? record.previousQuantity -
+                    record.totalQuantity -
+                    record.lessQuantity || 0
                 : "",
-            "",
+            record.lessQuantity || "",
             record.totalQuantity,
             record.totalPrice,
         ]);

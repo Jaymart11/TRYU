@@ -77,7 +77,7 @@ export const exportReports = async (req: any, res: any) => {
   const yesterdayStart = new Date(startDate.getTime() - 24 * 60 * 60 * 1000);
   const yesterdayEnd = new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
 
-  const compiledOrders = await Order.aggregate([
+  const queryOrders = await Order.aggregate([
     {
       $match: {
         createdAt: {
@@ -139,7 +139,38 @@ export const exportReports = async (req: any, res: any) => {
     },
   ]);
 
-  // console.log(compiledOrders);
+  const compiledLess = await Order.aggregate([
+    { $unwind: "$products" }, // Deconstruct the 'products' array
+    { $unwind: "$products.less" }, // Deconstruct the 'less' array
+    {
+      $group: {
+        _id: {
+          productName: "$products.less.name",
+          productID: "$products.less.product",
+        },
+        lessQuantity: { $sum: "$products.less.quantity" },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        product: "$_id.productID",
+        productName: "$_id.productName",
+        lessQuantity: 1,
+      },
+    },
+  ]);
+
+  console.log(compiledLess);
+
+  const compiledOrders = queryOrders.map((item2) => {
+    const matchingItem = compiledLess.find(
+      (item1) => item1.productName === item2.productName
+    );
+    return { ...item2, ...matchingItem };
+  });
+
+  // console.log(combinedArray);
 
   const allProducts = await Product.find({}).populate("category", "name");
 
@@ -193,6 +224,7 @@ export const exportReports = async (req: any, res: any) => {
         category: compiledOrder.category,
         previousQuantity: previousQuantity,
         currentPrice: currentPrice,
+        lessQuantity: compiledOrder.lessQuantity,
       };
     } else {
       return {
@@ -201,6 +233,7 @@ export const exportReports = async (req: any, res: any) => {
         product: product._id,
         productName: product.name,
         productCode: product.code,
+        // lessQuantity: compiledOrder.lessQuantity,
         category:
           typeof product.category === "string"
             ? product.category
@@ -212,6 +245,8 @@ export const exportReports = async (req: any, res: any) => {
   });
   let lastCategory = "";
   const categorySet = new Set();
+
+  // console.log(mergedData);
 
   // Add data from JSON to the worksheet
   mergedData
@@ -245,9 +280,11 @@ export const exportReports = async (req: any, res: any) => {
         record.previousQuantity || "",
         record.previousQuantity - record.totalQuantity > 0 &&
         record.previousQuantity - record.totalQuantity
-          ? record.previousQuantity - record.totalQuantity
+          ? record.previousQuantity -
+              record.totalQuantity -
+              record.lessQuantity || 0
           : "",
-        "",
+        record.lessQuantity || "",
         record.totalQuantity,
         record.totalPrice,
       ]);
