@@ -6,7 +6,7 @@ import {
   IUpdateExpense,
 } from "../interface/IExpense";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://testonly-1217.onrender.com/";
 
 const api = axios.create({
   baseURL: BASE_URL,

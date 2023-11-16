@@ -2,7 +2,7 @@ import { ENDPOINTS } from "../constants/ENDPOINTS";
 import axios from "axios";
 import { IProductCreate, IProductUpdate } from "../interface/IProduct";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://testonly-1217.onrender.com/";
 
 const api = axios.create({
   baseURL: BASE_URL,
