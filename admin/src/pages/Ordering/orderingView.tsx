@@ -102,7 +102,7 @@ const POSOrdering: React.FC = () => {
 
   const getCurrentProductQuantity = (productId: string) => {
     const product = selectedProducts.find((p) => p.id === productId);
-    return product ? product.quantity : 0;
+    return product ? product?.quantity : 0;
   };
 
   useEffect(() => {
@@ -120,7 +120,7 @@ const POSOrdering: React.FC = () => {
               : undefined,
           price: p.price,
           selected: false,
-          boxQuantity: p.box.quantity,
+          boxQuantity: p.box?.quantity,
           boxID: p.box._id,
         }));
 
@@ -139,7 +139,7 @@ const POSOrdering: React.FC = () => {
       AddProduct(product, currentProducts);
 
     if (existingProductIndex !== -1) {
-      if (product.quantity === undefined) {
+      if (product?.quantity === undefined) {
         updatedSelectedProducts[existingProductIndex].less = [
           ...(updatedSelectedProducts[existingProductIndex].less || []),
           ...less,
@@ -147,7 +147,7 @@ const POSOrdering: React.FC = () => {
       }
       updatedSelectedProducts[existingProductIndex].quantity += 1;
     } else {
-      if (product.quantity === undefined) {
+      if (product?.quantity === undefined) {
         updatedSelectedProducts.push({ ...product, quantity: 1, less });
       } else {
         updatedSelectedProducts.push({ ...product, quantity: 1 });
@@ -160,7 +160,7 @@ const POSOrdering: React.FC = () => {
           return {
             ...prod,
             quantity:
-              prod.quantity !== undefined ? prod.quantity - 1 : undefined,
+              prod?.quantity !== undefined ? prod?.quantity - 1 : undefined,
             boxQuantity: prod.boxQuantity - 1,
           };
         }
@@ -171,8 +171,8 @@ const POSOrdering: React.FC = () => {
           ? {
               ...prod,
               quantity:
-                prod.quantity !== undefined
-                  ? prod.quantity - lessQuantity
+                prod?.quantity !== undefined
+                  ? prod?.quantity - lessQuantity
                   : undefined,
             }
           : prod;
