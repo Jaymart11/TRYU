@@ -1,17 +1,16 @@
-import React from "react";
-import {
-  Typography,
-  TableContainer,
-  Table,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-  Button,
-  styled,
-} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import {
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import React from "react";
 
 interface Product {
   id: string;
@@ -30,23 +29,23 @@ interface AvailableProductsProps {
   selectedProducts: Product[];
 }
 
-const CustomTableContainer = styled(TableContainer)({
-  maxHeight: "70vh",
-  "&::-webkit-scrollbar": {
-    width: "4px",
-  },
-  "&::-webkit-scrollbar-thumb": {
-    backgroundColor: "#363636",
-    borderRadius: "8px",
-  },
-  "&::-webkit-scrollbar-thumb:hover": {
-    backgroundColor: "#adadad",
-  },
-  "&::-webkit-scrollbar-track": {
-    backgroundColor: "#adadad",
-    borderRadius: "10px",
-  },
-});
+// const CustomTableContainer = styled(TableContainer)({
+//   maxHeight: "70vh",
+//   "&::-webkit-scrollbar": {
+//     width: "4px",
+//   },
+//   "&::-webkit-scrollbar-thumb": {
+//     backgroundColor: "#363636",
+//     borderRadius: "8px",
+//   },
+//   "&::-webkit-scrollbar-thumb:hover": {
+//     backgroundColor: "#adadad",
+//   },
+//   "&::-webkit-scrollbar-track": {
+//     backgroundColor: "#adadad",
+//     borderRadius: "10px",
+//   },
+// });
 
 const AvailableProducts: React.FC<AvailableProductsProps> = ({
   currentProducts,
@@ -59,7 +58,7 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
       <Typography variant="h5" gutterBottom>
         Available Products
       </Typography>
-      <CustomTableContainer component={Paper} variant="outlined">
+      <TableContainer component={Paper} variant="outlined">
         <Table>
           <TableBody>
             {currentProducts?.map((product) => {
@@ -324,7 +323,7 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
             })}
           </TableBody>
         </Table>
-      </CustomTableContainer>
+      </TableContainer>
     </div>
   );
 };
