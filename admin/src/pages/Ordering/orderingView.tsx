@@ -30,14 +30,14 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useFetchCategory } from "../../shared/dao/categoryDao";
-import { useFetchProducts } from "../../shared/dao/productsDao";
-import AvailableProducts from "./avaibleProductsView";
-import { useCreateOrder } from "../../shared/dao/orderDao";
-import { IOrder } from "../../shared/interface/IOrder";
 import { useParams } from "react-router-dom";
+import { useFetchCategory } from "../../shared/dao/categoryDao";
+import { useCreateOrder } from "../../shared/dao/orderDao";
+import { useFetchProducts } from "../../shared/dao/productsDao";
 import { AddProduct } from "../../shared/hooks/AddProduct";
 import { MinusProduct } from "../../shared/hooks/MinusProduct";
+import { IOrder } from "../../shared/interface/IOrder";
+import AvailableProducts from "./avaibleProductsView";
 
 interface ProductBase {
   id: string;
@@ -90,8 +90,8 @@ const POSOrdering: React.FC = () => {
     setValue(newValue);
   };
 
-  const handlePMChange = (event) => {
-    setPaymentMethod(event.target.value);
+  const handlePMChange = (event: SelectChangeEvent) => {
+    setPaymentMethod(event.target.value as "GCash" | "Cash");
   };
 
   const { data: catData } = useFetchCategory();
