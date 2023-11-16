@@ -9,10 +9,15 @@ import {
   Collapse,
   Divider,
   Fade,
+  FormControl,
   Grid,
   IconButton,
+  InputLabel,
+  MenuItem,
   Modal,
   Paper,
+  Select,
+  SelectChangeEvent,
   Tab,
   Table,
   TableBody,
@@ -74,12 +79,19 @@ const style = {
 
 const POSOrdering: React.FC = () => {
   const [value, setValue] = React.useState("");
+  const [paymentMethod, setPaymentMethod] = React.useState<"Cash" | "GCash">(
+    "Cash"
+  );
   const [discount, setDiscount] = React.useState(0);
 
   const { transaction } = useParams();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+  };
+
+  const handlePMChange = (event) => {
+    setPaymentMethod(event.target.value);
   };
 
   const { data: catData } = useFetchCategory();
@@ -360,7 +372,7 @@ const POSOrdering: React.FC = () => {
           (total, item) => total + item.quantity * item.price,
           0
         ),
-        paymentMethod: "Cash",
+        paymentMethod,
         orderType: orderType,
         discount: discount || undefined,
       };
@@ -462,7 +474,7 @@ const POSOrdering: React.FC = () => {
           Ordering ({orderType.toUpperCase()})
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -487,7 +499,7 @@ const POSOrdering: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Card>
               <CardContent>
                 <Typography variant="h5" gutterBottom>
@@ -513,6 +525,19 @@ const POSOrdering: React.FC = () => {
                     0
                   ) - discount}
                 </Typography> */}
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel>Payment Method</InputLabel>
+                  <Select
+                    id="paymentMethod"
+                    name="paymentMethod"
+                    value={paymentMethod}
+                    onChange={handlePMChange}
+                    label="Select Payment Method"
+                  >
+                    <MenuItem value="Cash">Cash</MenuItem>
+                    <MenuItem value="GCash">GCash</MenuItem>
+                  </Select>
+                </FormControl>
                 <Button
                   variant="outlined"
                   color="primary"

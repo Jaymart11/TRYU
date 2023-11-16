@@ -188,7 +188,6 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             },
         },
     ]);
-    console.log(compiledLess);
     const compiledOrders = queryOrders.map((item2) => {
         const matchingItem = compiledLess.find((item1) => item1.productName === item2.productName);
         return Object.assign(Object.assign({}, item2), matchingItem);
@@ -257,11 +256,11 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     });
     let lastCategory = "";
     const categorySet = new Set();
-    // console.log(mergedData);
+    console.log(mergedData);
     // Add data from JSON to the worksheet
     mergedData
         .sort((a, b) => {
-        return a.category.localeCompare(b.category); // Sort the rest alphabetically
+        return a.category.localeCompare(b.category);
     })
         .forEach((record) => {
         // Check if the category has changed
@@ -283,15 +282,14 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             record.productName,
             record.currentPrice,
             record.previousQuantity || "",
-            record.previousQuantity - record.totalQuantity > 0 &&
-                record.previousQuantity - record.totalQuantity
-                ? record.previousQuantity -
+            record.previousQuantity - record.totalQuantity > 0
+                ? (record.previousQuantity || 0) -
                     record.totalQuantity -
-                    record.lessQuantity || 0
+                    (record.lessQuantity || 0)
                 : "",
             record.lessQuantity || "",
-            record.totalQuantity,
-            record.totalPrice,
+            record.totalQuantity || "",
+            record.totalPrice || "",
         ]);
     });
     function formatCategoryRow(row) {
@@ -492,12 +490,14 @@ const exportReports = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     // Add any remaining boxes from array2 to array1
     for (const box in boxToQuantityMap) {
-        boxQuantities.push({
-            totalQuantity: 0,
-            productQuantities: [],
-            box: box,
-            prevQuantity: boxToQuantityMap[box].prevQuantity,
-        });
+        if (desiredOrder.includes(box)) {
+            boxQuantities.push({
+                totalQuantity: 0,
+                productQuantities: [],
+                box: box,
+                prevQuantity: boxToQuantityMap[box].prevQuantity,
+            });
+        }
     }
     // Output the updated array1
     // console.log(boxQuantities[0]);

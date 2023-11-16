@@ -15,7 +15,7 @@ export interface IOrder extends Document {
   }>;
   cashier: Schema.Types.ObjectId | IUser;
   totalAmount: number;
-  paymentMethod: "Cash";
+  paymentMethod: "Cash" | "GCash";
   orderType: "Dine-In" | "Take-Out" | "Grab" | "Food Panda";
   discount?: number;
   createdAt: string;

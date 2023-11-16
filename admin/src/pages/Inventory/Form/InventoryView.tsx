@@ -1,13 +1,17 @@
 import {
   Button,
   FormControl,
+  FormControlLabel,
+  FormHelperText,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
 import { useFormik } from "formik";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,11 +21,13 @@ import { useFetchBox } from "../../../shared/dao/boxDao";
 import { useFetchCategory } from "../../../shared/dao/categoryDao";
 import {
   useCreateProduct,
+  useFetchProducts,
   useFetchSingleProduct,
   useUpdateProduct,
 } from "../../../shared/dao/productsDao";
 import { IProductCreate } from "../../../shared/interface/IProduct";
 import { IUser } from "../../../shared/interface/IUser";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface FormValues {
   name: string;
@@ -30,15 +36,16 @@ interface FormValues {
   box?: string;
   quantity?: number;
   price: number;
+  combo: string[];
 }
 
 const validationSchema = Yup.object({
-  name: Yup.string().required(),
-  code: Yup.string().required(),
-  category: Yup.string().required(),
-  box: Yup.string().required(),
-  price: Yup.number(),
-  combo: Yup.array(Yup.string()),
+  name: Yup.string().required().label("Product Name"),
+  code: Yup.string().required().label("Code"),
+  category: Yup.string().required().label("Category"),
+  box: Yup.string().required().label("Packaging"),
+  price: Yup.number().label("Price"),
+  combo: Yup.array().of(Yup.string().required("Product is required")),
 });
 
 const InventoryView = () => {
@@ -89,6 +96,7 @@ const InventoryView = () => {
     category: null,
     quantity: undefined,
     price: 0,
+    combo: [],
   };
 
   const formik = useFormik({
@@ -109,6 +117,7 @@ const InventoryView = () => {
         quantity: user?.role === "Manager" ? singleProduct.quantity : 0,
         price: singleProduct.price,
         box: singleProduct?.box,
+        combo: [],
       });
     }
 
@@ -119,6 +128,31 @@ const InventoryView = () => {
   const { data: BoxData } = useFetchBox();
 
   const navigate = useNavigate();
+
+  const handleAddItem = () => {
+    formik.setValues({
+      ...formik.values,
+      box: undefined,
+      combo: [...formik.values.combo, ""],
+    });
+  };
+
+  const handleDeleteItem = (index: number) => {
+    const newItems = [...formik.values.combo];
+    newItems.splice(index, 1);
+    formik.setValues({ ...formik.values, combo: newItems });
+  };
+
+  const { data: productData } = useFetchProducts();
+
+  const productDatas = productData
+    ? productData.flatMap((data) => {
+        return data.product.map((product) => ({
+          name: product.name,
+          _id: product._id,
+        }));
+      })
+    : [];
 
   return (
     <form
@@ -171,7 +205,7 @@ const InventoryView = () => {
             </Grid>
             <Grid item>
               <TextField
-                label="Product"
+                label="Product Name"
                 variant="outlined"
                 fullWidth
                 id="name"
@@ -182,28 +216,101 @@ const InventoryView = () => {
                 helperText={formik.touched.name && formik.errors.name}
               />
             </Grid>
-            <Grid item>
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={formik.touched.box && Boolean(formik.errors.box)}
-              >
-                <InputLabel>Packaging</InputLabel>
-                <Select
-                  id="box"
-                  name="box"
-                  value={formik.values.box || ""}
-                  onChange={formik.handleChange}
-                  label="Select Box/Packaging"
+            {formik.values.combo.length === 0 && (
+              <Grid item>
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  error={formik.touched.box && Boolean(formik.errors.box)}
                 >
-                  {BoxData?.map((box) => (
-                    <MenuItem key={box._id} value={box._id}>
-                      {box.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>{" "}
-            </Grid>
+                  <InputLabel>Packaging</InputLabel>
+                  <Select
+                    id="box"
+                    name="box"
+                    value={formik.values.box || ""}
+                    onChange={formik.handleChange}
+                    label="Select Box/Packaging"
+                  >
+                    <MenuItem value={""}>Empty</MenuItem>
+                    {BoxData?.map((box) => (
+                      <MenuItem key={box._id} value={box._id}>
+                        {box.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormHelperText sx={{ color: "#f44336" }}>
+                  {formik.touched.combo && formik.errors.box}
+                </FormHelperText>
+              </Grid>
+            )}
+            {formik.values.combo.map((_, idx) => (
+              <Grid item>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={
+                      formik.touched?.combo && formik.errors?.combo
+                        ? Boolean(formik.errors?.combo[idx])
+                        : false
+                    }
+                  >
+                    <InputLabel>Product</InputLabel>
+                    <Select
+                      id="{`combo[${idx}]`}"
+                      name={`combo[${idx}]`}
+                      value={formik.values.combo[idx] || ""}
+                      onChange={formik.handleChange}
+                      label="Select Product"
+                    >
+                      {productDatas?.map((prod) => (
+                        <MenuItem key={prod._id} value={prod._id}>
+                          {prod.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => handleDeleteItem(idx)}
+                  >
+                    <DeleteIcon color="error" sx={{ cursor: "pointer" }} />
+                  </IconButton>
+                </div>
+                <FormHelperText sx={{ color: "#f44336" }}>
+                  {formik.touched.combo && formik.errors.combo
+                    ? formik.errors.combo[idx]
+                    : ""}
+                </FormHelperText>
+              </Grid>
+            ))}
+            {!formik.values.box && (
+              <>
+                <Grid item>
+                  <FormControlLabel
+                    sx={{ color: "white" }}
+                    control={<Checkbox />}
+                    label="With Drinks"
+                  />
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    color="success"
+                    onClick={handleAddItem}
+                  >
+                    Add Product
+                  </Button>
+                </Grid>
+              </>
+            )}
           </>
         )}
         {user?.role === "Cashier" && (

@@ -8,6 +8,7 @@ import {
   TableCell,
   Paper,
   Button,
+  styled,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -29,6 +30,24 @@ interface AvailableProductsProps {
   selectedProducts: Product[];
 }
 
+const CustomTableContainer = styled(TableContainer)({
+  maxHeight: "70vh",
+  "&::-webkit-scrollbar": {
+    width: "4px",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "#363636",
+    borderRadius: "8px",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: "#adadad",
+  },
+  "&::-webkit-scrollbar-track": {
+    backgroundColor: "#adadad",
+    borderRadius: "10px",
+  },
+});
+
 const AvailableProducts: React.FC<AvailableProductsProps> = ({
   currentProducts,
   handleProductClick,
@@ -40,7 +59,7 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
       <Typography variant="h5" gutterBottom>
         Available Products
       </Typography>
-      <TableContainer component={Paper} variant="outlined">
+      <CustomTableContainer component={Paper} variant="outlined">
         <Table>
           <TableBody>
             {currentProducts?.map((product) => {
@@ -305,7 +324,7 @@ const AvailableProducts: React.FC<AvailableProductsProps> = ({
             })}
           </TableBody>
         </Table>
-      </TableContainer>
+      </CustomTableContainer>
     </div>
   );
 };

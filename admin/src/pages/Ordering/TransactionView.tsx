@@ -73,6 +73,7 @@ const TransactionView: React.FC = () => {
             variant="outlined"
             color="error"
             style={{ marginLeft: "8px" }}
+            onClick={() => navigate(ROUTES.EXPENSE.LIST)}
           >
             Expense
           </Button>
@@ -105,12 +106,10 @@ const TransactionView: React.FC = () => {
         open={Boolean(invMenuAnchor)}
         onClose={closeInvMenu}
       >
-        <MenuItem onClick={() => navigate(`${ROUTES.ORDERING}/dinein`)}>
+        <MenuItem onClick={() => navigate(ROUTES.PRODUCT.LIST)}>
           Product
         </MenuItem>
-        <MenuItem onClick={() => navigate(`${ROUTES.ORDERING}/takeout`)}>
-          Box / Packaging
-        </MenuItem>
+        <MenuItem onClick={() => navigate(ROUTES.BOX.LIST)}>Packaging</MenuItem>
       </Menu>
     </Box>
   );

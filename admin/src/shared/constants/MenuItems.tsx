@@ -1,6 +1,8 @@
 import { ROUTES } from "./ROUTES";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
+import PersonIcon from "@mui/icons-material/Person";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { IUser } from "../interface/IUser";
 
 export const MENU_LIST = () => {
@@ -31,7 +33,7 @@ export const MENU_LIST = () => {
       route: ROUTES.EXPENSE.LIST,
       path: "expense",
       title: "Expense",
-      icon: <CategoryIcon />,
+      icon: <AttachMoneyIcon />,
     },
   ];
 
@@ -40,7 +42,7 @@ export const MENU_LIST = () => {
       route: ROUTES.USER.LIST,
       path: "user",
       title: "User",
-      icon: <CategoryIcon />,
+      icon: <PersonIcon />,
     });
 
     menuItems.push({

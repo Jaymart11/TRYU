@@ -28,7 +28,7 @@ const orderSchema = new Schema(
     ],
     cashier: { type: Schema.Types.ObjectId, ref: "User", required: true },
     totalAmount: { type: Number, required: true },
-    paymentMethod: { type: String, enum: ["Cash"], required: true },
+    paymentMethod: { type: String, enum: ["Cash", "GCash"], required: true },
     orderType: {
       type: String,
       enum: ["Dine-In", "Take-Out", "Grab", "Food Panda"],

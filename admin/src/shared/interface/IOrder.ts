@@ -8,10 +8,13 @@ export interface IOrder {
       name: string;
       quantity: number;
     }>;
+    combo?: Array<{
+      product: string;
+    }>;
   }>;
   cashier: string;
   totalAmount: number;
-  paymentMethod: "Cash";
+  paymentMethod: "Cash" | "GCash";
   orderType: "Dine-In" | "Take-Out" | "Grab" | "Food Panda";
   discount?: number;
 }

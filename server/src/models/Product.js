@@ -10,10 +10,19 @@ const productSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     code: { type: String, required: true },
     category: { type: mongoose_1.Schema.Types.ObjectId, ref: Category_1.default, required: true },
-    box: { type: mongoose_1.Schema.Types.ObjectId, ref: Box_1.default, required: true },
+    box: { type: mongoose_1.Schema.Types.ObjectId, ref: Box_1.default },
     active: { type: Boolean, default: true },
     quantity: { type: Number },
     price: { type: Number, required: true },
+    combo: [
+        {
+            product: {
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: "Product",
+            },
+        },
+    ],
+    withDrink: { type: Boolean, default: false },
 }, { timestamps: true });
-const Product = (0, mongoose_1.model)("Product", productSchema, "productss");
+const Product = (0, mongoose_1.model)("Product", productSchema, "products");
 exports.default = Product;

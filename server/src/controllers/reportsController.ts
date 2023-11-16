@@ -161,8 +161,6 @@ export const exportReports = async (req: any, res: any) => {
     },
   ]);
 
-  console.log(compiledLess);
-
   const compiledOrders = queryOrders.map((item2) => {
     const matchingItem = compiledLess.find(
       (item1) => item1.productName === item2.productName
@@ -246,12 +244,12 @@ export const exportReports = async (req: any, res: any) => {
   let lastCategory = "";
   const categorySet = new Set();
 
-  // console.log(mergedData);
+  console.log(mergedData);
 
   // Add data from JSON to the worksheet
   mergedData
     .sort((a, b) => {
-      return a.category.localeCompare(b.category); // Sort the rest alphabetically
+      return a.category.localeCompare(b.category);
     })
     .forEach((record) => {
       // Check if the category has changed
@@ -278,15 +276,14 @@ export const exportReports = async (req: any, res: any) => {
         record.productName,
         record.currentPrice,
         record.previousQuantity || "",
-        record.previousQuantity - record.totalQuantity > 0 &&
-        record.previousQuantity - record.totalQuantity
-          ? record.previousQuantity -
-              record.totalQuantity -
-              record.lessQuantity || 0
+        record.previousQuantity - record.totalQuantity > 0
+          ? (record.previousQuantity || 0) -
+            record.totalQuantity -
+            (record.lessQuantity || 0)
           : "",
         record.lessQuantity || "",
-        record.totalQuantity,
-        record.totalPrice,
+        record.totalQuantity || "",
+        record.totalPrice || "",
       ]);
     });
 
@@ -506,12 +503,14 @@ export const exportReports = async (req: any, res: any) => {
 
   // Add any remaining boxes from array2 to array1
   for (const box in boxToQuantityMap) {
-    boxQuantities.push({
-      totalQuantity: 0,
-      productQuantities: [],
-      box: box,
-      prevQuantity: boxToQuantityMap[box].prevQuantity,
-    });
+    if (desiredOrder.includes(box)) {
+      boxQuantities.push({
+        totalQuantity: 0,
+        productQuantities: [],
+        box: box,
+        prevQuantity: boxToQuantityMap[box].prevQuantity,
+      });
+    }
   }
 
   // Output the updated array1
