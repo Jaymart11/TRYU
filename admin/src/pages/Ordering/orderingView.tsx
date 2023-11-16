@@ -111,7 +111,7 @@ const POSOrdering: React.FC = () => {
         .map((d) => d.product)
         .flat(1)
         .map((p) => ({
-          id: p._id,
+          id: p?._id,
           name: p.name,
           code: p.code,
           quantity:
@@ -121,7 +121,7 @@ const POSOrdering: React.FC = () => {
           price: p.price,
           selected: false,
           boxQuantity: p.box?.quantity,
-          boxID: p.box._id,
+          boxID: p.box?._id,
         }));
 
       setCurrentProducts(updatedProducts);
