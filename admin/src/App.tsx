@@ -1,24 +1,25 @@
-import { useEffect } from "react";
+import { lazy, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { ROUTES } from "./shared/constants/ROUTES";
 // import Layout from "./components/layout/Layout";
-import AppBar from "./components/layout/AppBar";
-import Layout from "./components/layout/Layout";
-import Sidebar from "./components/layout/Sidebar";
-import BoxForm from "./pages/Box/Form/BoxView";
-import BoxList from "./pages/Box/List/ListView";
-import CategoryForm from "./pages/Category/Form/CategoryView";
-import CategoryList from "./pages/Category/List/ListView";
-import ExpenseForm from "./pages/Expense/Form/ExpenseView";
-import ExpenseList from "./pages/Expense/List/ListView";
-import InvetoryForm from "./pages/Inventory/Form/InventoryView";
-import InventoryList from "./pages/Inventory/List/ListView";
-import Login from "./pages/Login/LoginView";
-import Transaction from "./pages/Ordering/TransactionView";
-import Ordering from "./pages/Ordering/orderingView";
-import ReportList from "./pages/Report/ReportView";
-import UserForm from "./pages/User/Form/UserView";
-import UserList from "./pages/User/List/ListView";
+const InventoryList = lazy(() => import("./pages/Inventory/List/ListView"));
+const CategoryList = lazy(() => import("./pages/Category/List/ListView"));
+const ReportList = lazy(() => import("./pages/Report/ReportView"));
+const BoxList = lazy(() => import("./pages/Box/List/ListView"));
+const UserList = lazy(() => import("./pages/User/List/ListView"));
+const ExpenseList = lazy(() => import("./pages/Expense/List/ListView"));
+const AppBar = lazy(() => import("./components/layout/AppBar"));
+const Sidebar = lazy(() => import("./components/layout/Sidebar"));
+const Layout = lazy(() => import("./components/layout/Layout"));
+const InvetoryForm = lazy(() => import("./pages/Inventory/Form/InventoryView"));
+const CategoryForm = lazy(() => import("./pages/Category/Form/CategoryView"));
+const BoxForm = lazy(() => import("./pages/Box/Form/BoxView"));
+const UserForm = lazy(() => import("./pages/User/Form/UserView"));
+const ExpenseForm = lazy(() => import("./pages/Expense/Form/ExpenseView"));
+
+const Transaction = lazy(() => import("./pages/Ordering/TransactionView"));
+const Ordering = lazy(() => import("./pages/Ordering/orderingView"));
+const Login = lazy(() => import("./pages/Login/LoginView"));
 
 const App = () => {
   const navigate = useNavigate();
